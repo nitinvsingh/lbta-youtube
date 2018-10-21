@@ -7,17 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C470AD2217C1E3A001285A6 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C470AD1217C1E3A001285A6 /* MenuBar.swift */; };
+		3C470AD4217C6E52001285A6 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C470AD3217C6E52001285A6 /* BaseCell.swift */; };
+		3C5E7E55217B579400E82BF3 /* Extensions+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5E7E54217B579400E82BF3 /* Extensions+UIKit.swift */; };
+		3C5E7E58217B587200E82BF3 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5E7E57217B587200E82BF3 /* VideoCell.swift */; };
 		84CDF3C821785C1500CFB31D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CDF3C721785C1500CFB31D /* AppDelegate.swift */; };
-		84CDF3CA21785C1500CFB31D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CDF3C921785C1500CFB31D /* ViewController.swift */; };
+		84CDF3CA21785C1500CFB31D /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CDF3C921785C1500CFB31D /* HomeController.swift */; };
 		84CDF3CD21785C1500CFB31D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84CDF3CB21785C1500CFB31D /* Main.storyboard */; };
 		84CDF3CF21785C1700CFB31D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84CDF3CE21785C1700CFB31D /* Assets.xcassets */; };
 		84CDF3D221785C1700CFB31D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84CDF3D021785C1700CFB31D /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C470AD1217C1E3A001285A6 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
+		3C470AD3217C6E52001285A6 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
+		3C5E7E54217B579400E82BF3 /* Extensions+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+UIKit.swift"; sourceTree = "<group>"; };
+		3C5E7E57217B587200E82BF3 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		84CDF3C421785C1500CFB31D /* Youtube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Youtube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CDF3C721785C1500CFB31D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		84CDF3C921785C1500CFB31D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		84CDF3C921785C1500CFB31D /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		84CDF3CC21785C1500CFB31D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84CDF3CE21785C1700CFB31D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84CDF3D121785C1700CFB31D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -35,6 +43,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C5E7E53217B577E00E82BF3 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3C5E7E54217B579400E82BF3 /* Extensions+UIKit.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		3C5E7E56217B586400E82BF3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3C470AD3217C6E52001285A6 /* BaseCell.swift */,
+				3C5E7E57217B587200E82BF3 /* VideoCell.swift */,
+				3C470AD1217C1E3A001285A6 /* MenuBar.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3C5E7E59217B58A600E82BF3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				84CDF3C921785C1500CFB31D /* HomeController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		84CDF3BB21785C1500CFB31D = {
 			isa = PBXGroup;
 			children = (
@@ -54,8 +88,10 @@
 		84CDF3C621785C1500CFB31D /* Youtube */ = {
 			isa = PBXGroup;
 			children = (
+				3C5E7E59217B58A600E82BF3 /* Controller */,
+				3C5E7E56217B586400E82BF3 /* View */,
+				3C5E7E53217B577E00E82BF3 /* Helpers */,
 				84CDF3C721785C1500CFB31D /* AppDelegate.swift */,
-				84CDF3C921785C1500CFB31D /* ViewController.swift */,
 				84CDF3CB21785C1500CFB31D /* Main.storyboard */,
 				84CDF3CE21785C1700CFB31D /* Assets.xcassets */,
 				84CDF3D021785C1700CFB31D /* LaunchScreen.storyboard */,
@@ -135,8 +171,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84CDF3CA21785C1500CFB31D /* ViewController.swift in Sources */,
+				84CDF3CA21785C1500CFB31D /* HomeController.swift in Sources */,
+				3C5E7E58217B587200E82BF3 /* VideoCell.swift in Sources */,
+				3C470AD4217C6E52001285A6 /* BaseCell.swift in Sources */,
+				3C5E7E55217B579400E82BF3 /* Extensions+UIKit.swift in Sources */,
 				84CDF3C821785C1500CFB31D /* AppDelegate.swift in Sources */,
+				3C470AD2217C1E3A001285A6 /* MenuBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,14 +323,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6259TCK6MC;
+				DEVELOPMENT_TEAM = C9LQ4NEELP;
 				INFOPLIST_FILE = Youtube/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.nitinvsingh.learn.Youtube;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nitinvsingh.lbta.youtube;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -302,14 +342,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6259TCK6MC;
+				DEVELOPMENT_TEAM = C9LQ4NEELP;
 				INFOPLIST_FILE = Youtube/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.nitinvsingh.learn.Youtube;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nitinvsingh.lbta.youtube;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

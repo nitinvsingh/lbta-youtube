@@ -21,8 +21,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let layout = UICollectionViewFlowLayout()
         let rootViewController = HomeController(collectionViewLayout: layout)
         let navigationController =  UINavigationController(rootViewController: rootViewController)
+        navigationController.navigationBar.isTranslucent = false
         
         window?.rootViewController = navigationController
+        
+        UINavigationBar.appearance().barTintColor = UIColor(r: 230, g: 32, b: 31)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        
+        let statusBarView = UIView(frame: application.statusBarFrame)
+        statusBarView.backgroundColor = UIColor(r: 194, g: 31, b: 31)
+        
+        window?.addSubview(statusBarView)
         
         return true
     }
@@ -51,4 +61,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-
