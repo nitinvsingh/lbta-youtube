@@ -15,7 +15,27 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         mb.translatesAutoresizingMaskIntoConstraints = false
         return mb
     }()
-
+    
+    var videos: [Video] = {
+        var kanye = Channel()
+        kanye.name = "KanyeIsTheBestChannel"
+        kanye.profileImage = "kanye_profile"
+        
+        let blankSpace = Video()
+        blankSpace.thumbnailImageName = "taylor_swift_blank_space"
+        blankSpace.title = "Taylor Swift - Blank Space"
+        blankSpace.views = 239843093
+        blankSpace.channel = kanye
+        
+        let badBlood = Video()
+        badBlood.thumbnailImageName = "taylor_swift_bad_blood"
+        badBlood.title = "Taylor Swift - Bad Blood featuring Kendrick Lamar"
+        badBlood.views = 579894934
+        badBlood.channel = kanye
+        
+        return [blankSpace, badBlood]
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -30,7 +50,18 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         
+        setupNavBarMenu()
         setupMenuBar()
+    }
+    
+    func setupNavBarMenu() {
+        let moreIcon = UIImage(named: "nav_more_icon")?.withRenderingMode(.alwaysOriginal)
+        let more = UIBarButtonItem(image: moreIcon, style: .plain, target: self, action: #selector(handleMore))
+        
+        let searchIcon = UIImage(named: "search_icon")?.withRenderingMode(.alwaysOriginal)
+        let search = UIBarButtonItem(image: searchIcon, style: .plain, target: self, action: #selector(handleSearch))
+        
+        navigationItem.rightBarButtonItems = [more, search]
     }
     
     func setupMenuBar() {
@@ -39,12 +70,21 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         view.addConstraintsWith(format: "V:|[v0(50)]", on: menuBar)
     }
     
+    @objc func handleMore() {
+        
+    }
+    
+    @objc func handleSearch() {
+        
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return videos.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! VideoCell
+        cell.video = videos[indexPath.item]
         return cell
     }
     
@@ -52,7 +92,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let height = (view.frame.width - 16 - 16) * 9 / 16
         return CGSize(width: view.frame.width, height: height + 16 + 68)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }

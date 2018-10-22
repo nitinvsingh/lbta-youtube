@@ -10,18 +10,44 @@ import UIKit
 
 class VideoCell: BaseCell {
     
-    let thumbnailImage: UIImageView = {
+    var video: Video? {
+        didSet {
+            if let thumbnailImage = video?.thumbnailImageName {
+                thumbnail.image = UIImage(named: thumbnailImage)
+            }
+            title.text = video?.title
+            if let profileImage = video?.channel?.profileImage {
+                profile.image = UIImage(named: profileImage)
+            }
+            subtitle.text = video?.channel?.name
+            if let views = video?.views {
+                if let _ = self.subtitle.text {
+                    self.subtitle.text += " • "
+                }
+                let numberFormatter = NumberFormatter()
+                numberFormatter.alwaysShowsDecimalSeparator = true
+                subtitle.text += numberFormatter.string(from: NSNumber(value: views))!
+            }
+            if let uploadDate = video?.uploaded {
+                if let _ = self.subtitle.text {
+                    self.subtitle.text += " • "
+                }
+                subtitle.text += String(uploadDate.timeIntervalSinceNow)
+            }
+            
+        }
+    }
+    
+    let thumbnail: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "taylor_swift_blank_space")
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    let profileImage: UIImageView = {
+    let profile: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "taylor_swift_profile")
         imageView.layer.cornerRadius = 22
         imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -30,7 +56,6 @@ class VideoCell: BaseCell {
     
     let title: UILabel = {
         let label = UILabel()
-        label.text = "Taylor Swift - Blank Space"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,7 +66,6 @@ class VideoCell: BaseCell {
         textView.isEditable = false
         textView.isSelectable = false
         textView.textColor = .lightGray
-        textView.text = "TaylorSwiftVEVO • 1,604,684,687 • 2 years ago"
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
@@ -54,26 +78,26 @@ class VideoCell: BaseCell {
     }()
     
     override func setupViews() {
-        addSubview(thumbnailImage)
-        addSubview(profileImage)
+        addSubview(thumbnail)
+        addSubview(profile)
         addSubview(title)
         addSubview(subtitle)
         addSubview(separator)
         
-        addConstraintsWith(format: "H:|-16-[v0]-16-|", on: thumbnailImage)
-        addConstraintsWith(format: "V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|", on: thumbnailImage, profileImage, separator)
-        addConstraintsWith(format: "H:|-16-[v0(44)]-8-[v1]-16-|", on: profileImage, title)
+        addConstraintsWith(format: "H:|-16-[v0]-16-|", on: thumbnail)
+        addConstraintsWith(format: "V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|", on: thumbnail, profile, separator)
+        addConstraintsWith(format: "H:|-16-[v0(44)]-8-[v1]-16-|", on: profile, title)
         addConstraintsWith(format: "H:|[v0]|", on: separator)
         
         // Title constraints
-        addConstraint(NSLayoutConstraint(item: title, attribute: .leading, relatedBy: .equal, toItem: profileImage, attribute: .trailing, multiplier: 1, constant: 8))
-        addConstraint(NSLayoutConstraint(item: title, attribute: .top, relatedBy: .equal, toItem: thumbnailImage, attribute: .bottom, multiplier: 1, constant: 8))
-        addConstraint(NSLayoutConstraint(item: title, attribute: .trailing, relatedBy: .equal, toItem: thumbnailImage, attribute: .trailing, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: title, attribute: .leading, relatedBy: .equal, toItem: profile, attribute: .trailing, multiplier: 1, constant: 8))
+        addConstraint(NSLayoutConstraint(item: title, attribute: .top, relatedBy: .equal, toItem: thumbnail, attribute: .bottom, multiplier: 1, constant: 8))
+        addConstraint(NSLayoutConstraint(item: title, attribute: .trailing, relatedBy: .equal, toItem: thumbnail, attribute: .trailing, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: title, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 20))
         
         //Subtitle constraints
-        addConstraint(NSLayoutConstraint(item: subtitle, attribute: .leading, relatedBy: .equal, toItem: profileImage, attribute: .trailing, multiplier: 1, constant: 8))
-        addConstraint(NSLayoutConstraint(item: subtitle, attribute: .trailing, relatedBy: .equal, toItem: thumbnailImage, attribute: .trailing, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: subtitle, attribute: .leading, relatedBy: .equal, toItem: profile, attribute: .trailing, multiplier: 1, constant: 8))
+        addConstraint(NSLayoutConstraint(item: subtitle, attribute: .trailing, relatedBy: .equal, toItem: thumbnail, attribute: .trailing, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: subtitle, attribute: .top, relatedBy: .equal, toItem: title, attribute: .bottom, multiplier: 1, constant: 8))
         addConstraint(NSLayoutConstraint(item: subtitle, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 30))
         
