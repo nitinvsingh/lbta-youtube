@@ -15,7 +15,6 @@ class VideoCell: BaseCell {
             if let thumbnailImage = video?.thumbnailImageName {
                 thumbnail.image = UIImage(named: thumbnailImage)
             }
-            title.text = video?.title
             if let profileImage = video?.channel?.profileImage {
                 profile.image = UIImage(named: profileImage)
             }
@@ -25,14 +24,24 @@ class VideoCell: BaseCell {
                     self.subtitle.text += " • "
                 }
                 let numberFormatter = NumberFormatter()
-                numberFormatter.alwaysShowsDecimalSeparator = true
+                numberFormatter.numberStyle = .decimal
                 subtitle.text += numberFormatter.string(from: NSNumber(value: views))!
             }
             if let uploadDate = video?.uploaded {
                 if let _ = self.subtitle.text {
                     self.subtitle.text += " • "
                 }
-                subtitle.text += String(uploadDate.timeIntervalSinceNow)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .short
+                subtitle.text += dateFormatter.string(from: uploadDate)
+            }
+            if let title = video?.title {
+                self.title.text = title
+                // Title label height calculation for the video
+                let size = CGSize(width: frame.width - 16 - 44 - 8 - 16, height: 1000)
+                let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+                let boundingRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [.font : UIFont.systemFont(ofSize: 14)], context: nil)
+                titleHeight.constant = boundingRect.size.height > 20 ? 44 : 20
             }
             
         }
@@ -56,6 +65,7 @@ class VideoCell: BaseCell {
     
     let title: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -77,6 +87,9 @@ class VideoCell: BaseCell {
         return view
     }()
     
+    private lazy var titleHeight: NSLayoutConstraint = {
+        return NSLayoutConstraint(item: title, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 20)
+    }()
     override func setupViews() {
         addSubview(thumbnail)
         addSubview(profile)
@@ -85,7 +98,7 @@ class VideoCell: BaseCell {
         addSubview(separator)
         
         addConstraintsWith(format: "H:|-16-[v0]-16-|", on: thumbnail)
-        addConstraintsWith(format: "V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|", on: thumbnail, profile, separator)
+        addConstraintsWith(format: "V:|-16-[v0]-8-[v1(44)]-36-[v2(1)]|", on: thumbnail, profile, separator)
         addConstraintsWith(format: "H:|-16-[v0(44)]-8-[v1]-16-|", on: profile, title)
         addConstraintsWith(format: "H:|[v0]|", on: separator)
         
@@ -93,7 +106,7 @@ class VideoCell: BaseCell {
         addConstraint(NSLayoutConstraint(item: title, attribute: .leading, relatedBy: .equal, toItem: profile, attribute: .trailing, multiplier: 1, constant: 8))
         addConstraint(NSLayoutConstraint(item: title, attribute: .top, relatedBy: .equal, toItem: thumbnail, attribute: .bottom, multiplier: 1, constant: 8))
         addConstraint(NSLayoutConstraint(item: title, attribute: .trailing, relatedBy: .equal, toItem: thumbnail, attribute: .trailing, multiplier: 1, constant: 0))
-        addConstraint(NSLayoutConstraint(item: title, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 20))
+        addConstraint(titleHeight)
         
         //Subtitle constraints
         addConstraint(NSLayoutConstraint(item: subtitle, attribute: .leading, relatedBy: .equal, toItem: profile, attribute: .trailing, multiplier: 1, constant: 8))
