@@ -12,14 +12,15 @@ class VideoCell: BaseCell {
     
     var video: Video? {
         didSet {
-            if let thumbnailImage = video?.thumbnailImageName {
-                thumbnail.image = UIImage(named: thumbnailImage)
+            guard let _video = video else { return }
+            if let thumbnailURL = _video.thumbnailImageName {
+                thumbnail.loadImageUsingURLString(thumbnailURL)
             }
-            if let profileImage = video?.channel?.profileImage {
-                profile.image = UIImage(named: profileImage)
+            if let profileImageURL = _video.channel?.profileImage {
+                profile.loadImageUsingURLString(profileImageURL)
             }
-            subtitle.text = video?.channel?.name
-            if let views = video?.views {
+            subtitle.text = _video.channel?.name
+            if let views = _video.views {
                 if let _ = self.subtitle.text {
                     self.subtitle.text += " • "
                 }
@@ -27,7 +28,7 @@ class VideoCell: BaseCell {
                 numberFormatter.numberStyle = .decimal
                 subtitle.text += numberFormatter.string(from: NSNumber(value: views))!
             }
-            if let uploadDate = video?.uploaded {
+            if let uploadDate = _video.uploaded {
                 if let _ = self.subtitle.text {
                     self.subtitle.text += " • "
                 }
@@ -35,7 +36,7 @@ class VideoCell: BaseCell {
                 dateFormatter.dateStyle = .short
                 subtitle.text += dateFormatter.string(from: uploadDate)
             }
-            if let title = video?.title {
+            if let title = _video.title {
                 self.title.text = title
                 // Title label height calculation for the video
                 let size = CGSize(width: frame.width - 16 - 44 - 8 - 16, height: 1000)
@@ -59,6 +60,7 @@ class VideoCell: BaseCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 22
         imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()

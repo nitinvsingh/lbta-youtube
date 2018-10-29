@@ -16,33 +16,38 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return mb
     }()
     
-    var videos: [Video] = {
-        var kanye = Channel()
-        kanye.name = "KanyeIsTheBestChannel"
-        kanye.profileImage = "kanye_profile"
-        
-        let blankSpace = Video()
-        blankSpace.thumbnailImageName = "taylor_swift_blank_space"
-        blankSpace.title = "Taylor Swift - Blank Space"
-        blankSpace.views = 239843093
-        var d = Date()
-        
-        blankSpace.uploaded = Date()
-        
-        blankSpace.channel = kanye
-        
-        let badBlood = Video()
-        badBlood.thumbnailImageName = "taylor_swift_bad_blood"
-        badBlood.title = "Taylor Swift - Bad Blood featuring Kendrick Lamar"
-        badBlood.views = 579894934
-        badBlood.channel = kanye
-        
-        return [blankSpace, badBlood]
-    }()
+    //    var videos: [Video] = {
+    //        var kanye = Channel()
+    //        kanye.name = "KanyeIsTheBestChannel"
+    //        kanye.profileImage = "kanye_profile"
+    //
+    //        let blankSpace = Video()
+    //        blankSpace.thumbnailImageName = "taylor_swift_blank_space"
+    //        blankSpace.title = "Taylor Swift - Blank Space"
+    //        blankSpace.views = 239843093
+    //        var d = Date()
+    //
+    //        blankSpace.uploaded = Date()
+    //
+    //        blankSpace.channel = kanye
+    //
+    //        let badBlood = Video()
+    //        badBlood.thumbnailImageName = "taylor_swift_bad_blood"
+    //        badBlood.title = "Taylor Swift - Bad Blood featuring Kendrick Lamar"
+    //        badBlood.views = 579894934
+    //        badBlood.channel = kanye
+    //
+    //        return [blankSpace, badBlood]
+    //    }()
+    
+    var videos: [Video]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        fetchVideos()
+        
         let title = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
         title.textColor = .white
         title.font = UIFont.systemFont(ofSize: 20)
@@ -74,6 +79,40 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         view.addConstraintsWith(format: "V:|[v0(50)]", on: menuBar)
     }
     
+    func fetchVideos() {
+        guard let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json") else {
+            return
+        }
+        URLSession.shared.dataTask(with: url) {[weak self] data, resp, err in
+            guard err == nil else { return }
+            guard let data = data else { return }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+                self?.videos = [Video]()
+                for dictionary in json as! [[String : AnyObject]] {
+                    let video = Video()
+                    video.title = dictionary["title"] as? String
+                    video.thumbnailImageName = dictionary["thumbnail_image_name"] as? String
+                    
+                    let channel = Channel()
+                    let channelDictionary = dictionary["channel"] as! [String : AnyObject]
+                    channel.name = channelDictionary["name"] as? String
+                    channel.profileImage = channelDictionary["profile_image_name"] as? String
+                    video.channel = channel
+                    
+                    self?.videos?.append(video)
+                    DispatchQueue.main.async {
+                        self?.collectionView.reloadData()
+                    }
+                }
+            } catch let jsonError {
+                print(jsonError.localizedDescription)
+            }
+            
+            
+            }.resume()
+    }
+    
     @objc func handleMore() {
         
     }
@@ -83,12 +122,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return videos.count
+        return videos?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! VideoCell
-        cell.video = videos[indexPath.item]
+        cell.video = videos?[indexPath.item]
         return cell
     }
     
