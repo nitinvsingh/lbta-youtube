@@ -48,16 +48,16 @@ class VideoCell: BaseCell {
         }
     }
     
-    let thumbnail: UIImageView = {
-        let imageView = UIImageView()
+    let thumbnail: CustomImageView = {
+        let imageView = CustomImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    let profile: UIImageView = {
-        let imageView = UIImageView()
+    let profile: CustomImageView = {
+        let imageView = CustomImageView()
         imageView.layer.cornerRadius = 22
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill

@@ -16,30 +16,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return mb
     }()
     
-    //    var videos: [Video] = {
-    //        var kanye = Channel()
-    //        kanye.name = "KanyeIsTheBestChannel"
-    //        kanye.profileImage = "kanye_profile"
-    //
-    //        let blankSpace = Video()
-    //        blankSpace.thumbnailImageName = "taylor_swift_blank_space"
-    //        blankSpace.title = "Taylor Swift - Blank Space"
-    //        blankSpace.views = 239843093
-    //        var d = Date()
-    //
-    //        blankSpace.uploaded = Date()
-    //
-    //        blankSpace.channel = kanye
-    //
-    //        let badBlood = Video()
-    //        badBlood.thumbnailImageName = "taylor_swift_bad_blood"
-    //        badBlood.title = "Taylor Swift - Bad Blood featuring Kendrick Lamar"
-    //        badBlood.views = 579894934
-    //        badBlood.channel = kanye
-    //
-    //        return [blankSpace, badBlood]
-    //    }()
-    
     var videos: [Video]?
     
     override func viewDidLoad() {
