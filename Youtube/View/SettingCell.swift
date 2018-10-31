@@ -13,7 +13,7 @@ class SettingCell: BaseCell {
     var setting: Setting? {
         didSet {
             if let setting = setting {
-                name.text = setting.name
+                name.text = setting.name?.rawValue
                 if let imageName = setting.icon {
                     icon.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
                 }

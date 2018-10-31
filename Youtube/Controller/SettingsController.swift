@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SettingsController: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let backdrop: UIView = {
         let view = UIView()
@@ -26,14 +26,16 @@ class SettingsLauncher: NSObject, UICollectionViewDelegate, UICollectionViewData
     }()
     
     let settings : [Setting] = {
-        let setting = Setting(name: "Settings", icon: "settings")
-        let privacy = Setting(name: "Terms & privacy policy", icon: "privacy")
-        let feedback = Setting(name: "Send Feedback", icon: "feedback")
-        let help = Setting(name: "Help", icon: "help")
-        let account = Setting(name: "Switch Account", icon: "switch_account")
-        let cancel = Setting(name: "Cancel", icon: "cancel")
+        let setting = Setting(name: .appSettings, icon: "settings")
+        let privacy = Setting(name: .privacyTerms, icon: "privacy")
+        let feedback = Setting(name: .feedback, icon: "feedback")
+        let help = Setting(name: .help, icon: "help")
+        let account = Setting(name: .account, icon: "switch_account")
+        let cancel = Setting(name: .cancel, icon: "cancel")
         return [setting, privacy, feedback, help, account, cancel]
     }()
+    
+    var homeController: HomeController?
 
     let cellId = "cellId"
     let cellHeight: CGFloat = 50
@@ -63,14 +65,18 @@ class SettingsLauncher: NSObject, UICollectionViewDelegate, UICollectionViewData
         }
     }
     
-    @objc func dismiss() {
-        UIView.animate(withDuration: 0.5) {
+    
+    
+    @objc func dismiss(withSetting setting: Setting) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.backdrop.alpha = 0
             if let window = UIApplication.shared.keyWindow {
                 self.collectionView.frame = CGRect(x: 0, y: window.frame.height, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
             }
+        }) { _ in
+            guard type(of: setting) != UITapGestureRecognizer.self, setting.name != .cancel else { return }
+            self.homeController?.showControllerForSetting(setting)
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -89,5 +95,10 @@ class SettingsLauncher: NSObject, UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let setting = settings[indexPath.item]
+        dismiss(withSetting: setting)
     }
 }

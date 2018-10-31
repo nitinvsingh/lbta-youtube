@@ -18,7 +18,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var videos: [Video]?
     
-    let settings = SettingsLauncher()
+//    let settings = SettingsLauncher()
+    lazy var settings: SettingsController = {
+        let controller = SettingsController()
+        controller.homeController = self
+        return controller
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,9 +98,20 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc func handleMore() {
         settings.show()
+        settings.homeController = self
     }
     
     @objc func handleSearch() {
+        
+    }
+    
+    func showControllerForSetting(_ setting: Setting) {
+        let dummy = UIViewController()
+        dummy.title = setting.name?.rawValue
+        dummy.view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.pushViewController(dummy, animated: true)
         
     }
     
