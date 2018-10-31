@@ -39,7 +39,7 @@ class SettingCell: BaseCell {
     override var isHighlighted: Bool {
         didSet {
             backgroundColor = isHighlighted ? .darkGray : .white
-            name.textColor = isHighlighted ? .white : .darkGray
+            name.textColor = isHighlighted ? .white : .black
             icon.tintColor = isHighlighted ? .white : .darkGray
         }
     }

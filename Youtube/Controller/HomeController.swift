@@ -57,9 +57,21 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func setupMenuBar() {
+        navigationController?.hidesBarsOnSwipe = true
+        
+        let redView = UIView()
+        redView.backgroundColor = UIColor(r: 230, g: 32, b: 31)
+        redView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(redView)
+        view.addConstraintsWith(format: "H:|[v0]|", on: redView)
+        view.addConstraintsWith(format: "V:[v0(50)]", on: redView)
+        
         view.addSubview(menuBar)
         view.addConstraintsWith(format: "H:|[v0]|", on: menuBar)
-        view.addConstraintsWith(format: "V:|[v0(50)]", on: menuBar)
+        view.addConstraintsWith(format: "V:[v0(50)]", on: menuBar)
+        
+        menuBar.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+        
     }
     
     func fetchVideos() {
