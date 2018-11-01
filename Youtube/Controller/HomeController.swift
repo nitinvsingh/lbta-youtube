@@ -70,42 +70,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         view.addConstraintsWith(format: "H:|[v0]|", on: menuBar)
         view.addConstraintsWith(format: "V:[v0(50)]", on: menuBar)
         
-        menuBar.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+        menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         
     }
     
     func fetchVideos() {
-        guard let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json") else {
-            return
-        }
-        URLSession.shared.dataTask(with: url) {[weak self] data, resp, err in
-            guard err == nil else { return }
-            guard let data = data else { return }
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-                self?.videos = [Video]()
-                for dictionary in json as! [[String : AnyObject]] {
-                    let video = Video()
-                    video.title = dictionary["title"] as? String
-                    video.thumbnailImageName = dictionary["thumbnail_image_name"] as? String
-                    
-                    let channel = Channel()
-                    let channelDictionary = dictionary["channel"] as! [String : AnyObject]
-                    channel.name = channelDictionary["name"] as? String
-                    channel.profileImage = channelDictionary["profile_image_name"] as? String
-                    video.channel = channel
-                    
-                    self?.videos?.append(video)
-                    DispatchQueue.main.async {
-                        self?.collectionView.reloadData()
-                    }
-                }
-            } catch let jsonError {
-                print(jsonError.localizedDescription)
+        ApiService.shared.fetchVideos { videos in
+            self.videos = videos
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
             }
-            
-            
-            }.resume()
+        }
     }
     
     @objc func handleMore() {

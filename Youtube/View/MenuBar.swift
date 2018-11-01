@@ -22,6 +22,15 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         cv.dataSource = self
         return cv
     }()
+    
+    let selectionBar: UIView = {
+        let bar = UIView()
+        bar.backgroundColor = .white
+        bar.translatesAutoresizingMaskIntoConstraints = false
+        return bar
+    }()
+    
+    var selectionBarLeftConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,10 +42,21 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         
         let home = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: home, animated: false, scrollPosition: .left)
+        
+        addSubview(selectionBar)
+        setupSelectionBar()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupSelectionBar() {
+        selectionBarLeftConstraint = selectionBar.leftAnchor.constraint(equalToSystemSpacingAfter: self.leftAnchor, multiplier: 0)
+        selectionBarLeftConstraint?.isActive = true
+        selectionBar.bottomAnchor.constraint(equalToSystemSpacingBelow: self.bottomAnchor, multiplier: 0).isActive = true
+        selectionBar.heightAnchor.constraint(equalToConstant: 4).isActive = true
+        selectionBar.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1 / 4).isActive = true
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -58,6 +78,16 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let barX = (frame.width / 4) * CGFloat(indexPath.item)
+        selectionBarLeftConstraint?.constant = barX
+        
+        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.layoutIfNeeded()
+        }, completion: nil)
+        
+    }
+    
 }
 
 class MenuCell: BaseCell {
@@ -67,12 +97,6 @@ class MenuCell: BaseCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
-    
-//    override var isHighlighted: Bool {
-//        didSet {
-//            toggleMenu(isHighlighted)
-//        }
-//    }
     
     override var isSelected: Bool {
         didSet {
