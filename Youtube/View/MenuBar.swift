@@ -10,6 +10,8 @@ import UIKit
 
 class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    var homeController: HomeController?
+    
     let cellId = "cellId"
     let menuImages = ["home", "trending", "subscriptions", "account"]
     
@@ -25,7 +27,7 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
     
     let selectionBar: UIView = {
         let bar = UIView()
-        bar.backgroundColor = .white
+        bar.backgroundColor = UIColor.init(white: 1, alpha: 0.85)
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
     }()
@@ -79,13 +81,12 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let barX = (frame.width / 4) * CGFloat(indexPath.item)
-        selectionBarLeftConstraint?.constant = barX
-        
-        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.layoutIfNeeded()
-        }, completion: nil)
-        
+//        let barX = (frame.width / 4) * CGFloat(indexPath.item)
+//        selectionBarLeftConstraint?.constant = barX
+//        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+//            self.layoutIfNeeded()
+//        }, completion: nil)
+        homeController?.scrollToMenu(atIndex: indexPath.item)
     }
     
 }
