@@ -19,7 +19,7 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = UIColor(r: 230, g: 32, b: 31)
-        cv.register(MenuCell.self, forCellWithReuseIdentifier: "cellId")
+        cv.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
         cv.delegate = self
         cv.dataSource = self
         return cv
@@ -74,7 +74,7 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! MenuCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MenuCell
         cell.imageView.image = UIImage(named: menuImages[indexPath.item])?.withRenderingMode(.alwaysTemplate)
         cell.tintColor = UIColor(r: 91, g: 14, b: 13)
         return cell
