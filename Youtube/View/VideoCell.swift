@@ -28,14 +28,6 @@ class VideoCell: BaseCell {
                 numberFormatter.numberStyle = .decimal
                 subtitle.text += numberFormatter.string(from: NSNumber(value: views))!
             }
-            if let uploadDate = _video.uploaded {
-                if let _ = self.subtitle.text {
-                    self.subtitle.text += " • "
-                }
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = .short
-                subtitle.text += dateFormatter.string(from: uploadDate)
-            }
             if let title = _video.title {
                 self.title.text = title
                 // Title label height calculation for the video

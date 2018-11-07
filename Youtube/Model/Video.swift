@@ -8,15 +8,29 @@
 
 import Foundation
 
-class Video: NSObject {
+struct Video: Decodable {
     var thumbnailImageName: String?
     var title: String?
     var views: UInt?
-    var uploaded: Date?
+    var duration: Int?
     var channel: Channel?
+    
+    enum CodingKeys: String, CodingKey {
+        case title = "title"
+        case views = "number_of_views"
+        case thumbnailImageName = "thumbnail_image_name"
+        case duration = "duration"
+        case channel = "channel"
+    }
+    
 }
 
-class Channel: NSObject {
+struct Channel: Decodable {
     var name: String?
     var profileImage: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case name = "name"
+        case profileImage = "profile_image_name"
+    }
 }

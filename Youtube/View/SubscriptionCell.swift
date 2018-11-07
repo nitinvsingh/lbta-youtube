@@ -12,7 +12,9 @@ class SubscriptionCell: FeedCell {
     override func fetchVideos() {
         ApiService.shared.fetchSubscriptionVideos { videos in
             self.videos = videos
-            self.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()                
+            }
         }
     }
 }

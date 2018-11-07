@@ -12,7 +12,9 @@ class TrendingCell: FeedCell {
     override func fetchVideos() {
         ApiService.shared.fetchTrendingVideos { videos in
             self.videos = videos
-            self.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()                
+            }
         }
     }
 }
