@@ -17,20 +17,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return mb
     }()
     
-    lazy var spinner: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-        view.hidesWhenStopped = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     let titles = ["Home", "Trending", "Subscriptions", "Account"]
     
-    var videos: [Video]?
+    let feedCellIdentifier = "feedCellIdentifier"
+    let trendingCellIdentifier = "trendingCellIdentifier"
+    let subscriptionCellIdentifier = "subscriptionCellIdentifier"
     
-    let container = "container"
-    
-//    let settings = SettingsLauncher()
     lazy var settings: SettingsController = {
         let controller = SettingsController()
         controller.homeController = self
@@ -90,7 +82,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         collectionView.isPagingEnabled = true
         collectionView.backgroundColor = .white
-        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: container)
+        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: feedCellIdentifier)
+        collectionView.register(TrendingCell.self, forCellWithReuseIdentifier: trendingCellIdentifier)
+        collectionView.register(SubscriptionCell.self, forCellWithReuseIdentifier: subscriptionCellIdentifier)
         collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
     }
@@ -128,8 +122,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: container, for: indexPath) as! FeedCell
-        cell.videos = videos
+        let cellIdentifier: String
+        if indexPath.item == 1 {
+            cellIdentifier = trendingCellIdentifier
+        } else if indexPath.item == 2 {
+            cellIdentifier = subscriptionCellIdentifier
+        } else {
+            cellIdentifier = feedCellIdentifier
+        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
         return cell
     }
     
