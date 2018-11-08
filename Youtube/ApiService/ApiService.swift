@@ -37,22 +37,6 @@ class ApiService: NSObject {
                 let decoder = JSONDecoder()
                 let videos = try decoder.decode([Video].self, from: data)
                 completion(videos)
-                
-//                let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-//                var videos = [Video]()
-//                for dictionary in json as! [[String : AnyObject]] {
-//                    let video = Video()
-//                    video.title = dictionary["title"] as? String
-//                    video.thumbnailImageName = dictionary["thumbnail_image_name"] as? String
-//
-//                    let channel = Channel()
-//                    let channelDictionary = dictionary["channel"] as! [String : AnyObject]
-//                    channel.name = channelDictionary["name"] as? String
-//                    channel.profileImage = channelDictionary["profile_image_name"] as? String
-//                    video.channel = channel
-//                    videos.append(video)
-//                }
-//                completion(videos)
             } catch let jsonError {
                 print(jsonError.localizedDescription)
             }
