@@ -11,6 +11,7 @@ import AVFoundation
 
 class VideoPlayer: UIView {
     
+    var isPlaying = false
     var avPlayer: AVPlayer?
     
     let controlContainer: UIView = {
@@ -36,7 +37,26 @@ class VideoPlayer: UIView {
         return button
     }()
     
-    var isPlaying = false
+    let duration: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .right
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.text = "00:00"
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let slider: UISlider = {
+        let slider = UISlider()
+        slider.minimumTrackTintColor = .red
+        slider.thumbTintColor = .red
+        slider.maximumTrackTintColor = .white
+        slider.setThumbImage(UIImage(named: "thumb"), for: .normal)
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        slider.addTarget(self, action: #selector(handleSliderDragged), for: .valueChanged)
+        return slider
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -57,6 +77,18 @@ class VideoPlayer: UIView {
         playPause.widthAnchor.constraint(equalToConstant: 50).isActive = true
         playPause.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        controlContainer.addSubview(duration)
+        duration.rightAnchor.constraint(equalTo: rightAnchor, constant: -8).isActive = true
+        duration.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        duration.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        duration.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        controlContainer.addSubview(slider)
+        slider.rightAnchor.constraint(equalTo: duration.leftAnchor).isActive = true
+        slider.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        slider.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        slider.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
         spinner.startAnimating()
     }
     
@@ -72,6 +104,16 @@ class VideoPlayer: UIView {
             playerLayer.frame = self.frame
             avPlayer?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
             avPlayer?.play()
+        }
+    }
+    
+    @objc func handleSliderDragged() {
+        if let duration = avPlayer?.currentItem?.duration {
+            let timeValue = duration.seconds * Double(slider.value)
+            let seekTime = CMTime(seconds: timeValue, preferredTimescale: 1)
+            avPlayer?.seek(to: seekTime, completionHandler: { completed in
+                //
+            })
         }
     }
     
@@ -92,6 +134,12 @@ class VideoPlayer: UIView {
             controlContainer.backgroundColor = .clear
             playPause.isHidden = false
             isPlaying = true
+            if let avDuration = avPlayer?.currentItem?.duration {
+                let seconds = avDuration.seconds
+                let secondsText = String(format: "%02d", Int(seconds) % 60)
+                let minutesText = String(format: "%02d", Int(seconds) / 60)
+                duration.text = "\(minutesText):\(secondsText)"
+            }
         }
     }
 }
