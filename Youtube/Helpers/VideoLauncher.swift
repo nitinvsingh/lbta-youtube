@@ -37,10 +37,19 @@ class VideoPlayer: UIView {
         return button
     }()
     
+    let played: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.text = "00:00"
+        label.font = UIFont.boldSystemFont(ofSize: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let duration: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 13)
         label.text = "00:00"
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +75,13 @@ class VideoPlayer: UIView {
         
         controlContainer.frame = frame
         addSubview(controlContainer)
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        gradientLayer.locations = [0.7, 1.0]
+        gradientLayer.frame = bounds
+        controlContainer.layer.addSublayer(gradientLayer)
+        
         controlContainer.addSubview(spinner)
         controlContainer.addSubview(playPause)
         
@@ -80,12 +96,18 @@ class VideoPlayer: UIView {
         controlContainer.addSubview(duration)
         duration.rightAnchor.constraint(equalTo: rightAnchor, constant: -8).isActive = true
         duration.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        duration.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        duration.widthAnchor.constraint(equalToConstant: 50).isActive = true
         duration.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        controlContainer.addSubview(played)
+        played.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
+        played.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        played.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        played.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
         controlContainer.addSubview(slider)
         slider.rightAnchor.constraint(equalTo: duration.leftAnchor).isActive = true
-        slider.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        slider.leftAnchor.constraint(equalTo: played.rightAnchor).isActive = true
         slider.heightAnchor.constraint(equalToConstant: 30).isActive = true
         slider.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
@@ -103,6 +125,16 @@ class VideoPlayer: UIView {
             self.layer.addSublayer(playerLayer)
             playerLayer.frame = self.frame
             avPlayer?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
+            let interval = CMTime(seconds: 1, preferredTimescale: 2)
+            avPlayer?.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { [weak self] progress in
+                let seconds = progress.seconds
+                let secondsText = String(format: "%02d", Int(seconds) % 60)
+                let minutesText = String(format: "%02d", Int(seconds) / 60)
+                self?.played.text = minutesText + ":" + secondsText
+                if let totalDuration = self?.avPlayer?.currentItem?.duration.seconds {
+                    self?.slider.value = Float(seconds / totalDuration)
+                }
+            })
             avPlayer?.play()
         }
     }
